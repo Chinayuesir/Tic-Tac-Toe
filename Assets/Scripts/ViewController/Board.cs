@@ -31,22 +31,22 @@ namespace Game
             mGameSystem.InitGame();
             if(!this.GetModel<IGameModel>().IsPlayerFirstMove) mGameSystem.AIMove();
             Refresh();
+            
+            //每次点击进行游戏逻辑推进
             mOnClick = (x, y) =>
             {
                 Debug.Log($"位于{x},{y}处的棋子被点击了");
                 mGameSystem.PlayerMove(x,y);
-                mGameSystem.JudgeWinOrLose();
-                mGameSystem.AIMove();
-                mGameSystem.JudgeWinOrLose();
                 Refresh();
+                mGameSystem.JudgeWinOrLose();
+                if (!this.GetModel<IGameModel>().IsGameOver)
+                {
+                    mGameSystem.AIMove();
+                    Refresh();
+                    mGameSystem.JudgeWinOrLose();
+                }
             };
         }
-        
-        private void Update()
-        {
-            
-        }
-
         //棋盘刷新方法
         private void Refresh()
         {

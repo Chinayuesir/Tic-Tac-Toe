@@ -38,6 +38,8 @@ namespace Game
 
         private char mPlayerChess;
         private char mAIChess;
+
+        private IChessAIStrategy mChessAIStrategy;
         
         protected override void OnInit()
         {
@@ -46,7 +48,22 @@ namespace Game
         
         public void InitGame()
         {
-            //TODO:根据难度注入AI
+            //根据难度注入AI
+            if (mGameModel.CurDifficulty == 1)
+            {
+                mChessAIStrategy = new EasyAIStrategy();
+                Debug.Log("简单难度");
+            }else if (mGameModel.CurDifficulty == 2)
+            {
+                mChessAIStrategy = new NormalAIStrategy();
+                Debug.Log("普通难度");
+            }
+            else
+            {
+                mChessAIStrategy = new NormalAIStrategy();
+                Debug.Log("困难难度");
+            }
+
             mGameModel.Turn = 1;
             mGameModel.IsPlayerTurn = mGameModel.IsPlayerFirstMove;
             Board = new EasyGrid<Chess>(3, 3);
@@ -63,25 +80,51 @@ namespace Game
                 mAIChess = 'O';
             }
         }
-        
+
+        /// <summary>
+        /// 检验是否平局
+        /// </summary>
+        /// <returns></returns>
+        private bool JudgeIsDraw()
+        {
+            bool isDraw = true;
+            Board.ForEach((_, _, chess) =>
+            {
+                if (chess.C == ' ') isDraw = false;
+            });
+            return isDraw;
+        }
+
+        /// <summary>
+        /// 检验输赢
+        /// </summary>
         public void JudgeWinOrLose()
         {
             bool playerWin=JudgeWin(mPlayerChess);
             bool aiWin=JudgeWin(mAIChess);
             if (playerWin)
             {
+                //如果玩家赢了，还有可能解锁更高难度的AI
                 int curDif = mGameModel.CurDifficulty;
-                int historyDif = PlayerPrefs.GetInt(TicTacToe.Difficulty);
+                int historyDif = PlayerPrefs.GetInt(TicTacToe.MaxDifficulty);
                 if(curDif==historyDif) 
-                    PlayerPrefs.SetInt(TicTacToe.Difficulty,curDif+1);
+                    PlayerPrefs.SetInt(TicTacToe.MaxDifficulty,curDif+1);
                 TicTacToe.GameOverEvent.Trigger(true);
                 mGameModel.IsGameOver = true;
+                return;
             }
 
             if (aiWin)
             {
                 TicTacToe.GameOverEvent.Trigger(false);
                 mGameModel.IsGameOver = true;
+                return;
+            }
+            
+            //平局检测
+            if (JudgeIsDraw())
+            {
+                TicTacToe.GameDrawEvent.Trigger();
             }
         }
 
@@ -151,22 +194,12 @@ namespace Game
 
         public void AIMove()
         {
-            if (!mGameModel.IsPlayerTurn)
+            if (!mGameModel.IsPlayerTurn && !mGameModel.IsGameOver)
             {
-                //乱下
-                for (int i = 0; i < 3; i++)
-                {
-                    for (int j = 0; j < 3; j++)
-                    {
-                        if (Board[i, j].C == ' ')
-                        {
-                            Board[i, j].C = mAIChess;
-                            mGameModel.Turn++;
-                            mGameModel.IsPlayerTurn = true;
-                            return;
-                        }
-                    }
-                }
+                var loc = mChessAIStrategy.MakeMove(Board,mPlayerChess,mAIChess);
+                Board[loc.Item1, loc.Item2].C = mAIChess;
+                mGameModel.Turn++;
+                mGameModel.IsPlayerTurn = true;
             }
         }
     }

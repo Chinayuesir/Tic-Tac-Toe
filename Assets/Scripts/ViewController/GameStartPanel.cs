@@ -13,6 +13,7 @@ namespace Game
         private Button mEasyBtn;
         private Button mNormalBtn;
         private Button mHardBtn;
+        private Button mQuitGameBtn;
         private Toggle mPlayerFirst;
         
         public Sprite mButtonBg;
@@ -26,20 +27,22 @@ namespace Game
             mNormalBtn.interactable = false;
             mHardBtn = transform.Find("HardBtn").GetComponent<Button>();
             mHardBtn.interactable = false;
+            mQuitGameBtn = transform.Find("QuitGameBtn").GetComponent<Button>();
+            mQuitGameBtn.onClick.AddListener(Application.Quit);
             mEasyBtn.onClick.AddListener(()=>StartGame(1));
             mNormalBtn.onClick.AddListener(()=>StartGame(2));
             mHardBtn.onClick.AddListener(()=>StartGame(3));
 
             mPlayerFirst = transform.Find("IsPlayerFirst").GetComponent<Toggle>();
             
-            if (PlayerPrefs.HasKey(TicTacToe.Difficulty))
+            if (PlayerPrefs.HasKey(TicTacToe.MaxDifficulty))
             {
-                mDif=PlayerPrefs.GetInt(TicTacToe.Difficulty);
+                mDif=PlayerPrefs.GetInt(TicTacToe.MaxDifficulty);
             }
             else
             {
                 mDif=1;
-                PlayerPrefs.SetInt(TicTacToe.Difficulty,mDif);
+                PlayerPrefs.SetInt(TicTacToe.MaxDifficulty,mDif);
             }
             RefreshUI();
         }
@@ -49,6 +52,7 @@ namespace Game
             SceneManager.LoadScene("Game");
             this.GetModel<IGameModel>().IsGameOver = false;
             this.GetModel<IGameModel>().IsPlayerFirstMove = mPlayerFirst.isOn;
+            this.GetModel<IGameModel>().CurDifficulty = difficulty;
         }
 
         private void RefreshUI()

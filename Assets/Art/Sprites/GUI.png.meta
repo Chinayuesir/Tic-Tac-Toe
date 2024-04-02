@@ -296,7 +296,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GUI_7
+      name: QuitGame
       rect:
         serializedVersion: 2
         x: 53
@@ -2176,7 +2176,6 @@ TextureImporter:
       GUI_67: 648449778
       GUI_68: 157659493
       GUI_69: -1793454706
-      GUI_7: 932805899
       GUI_70: -333170241
       GUI_71: 2130487423
       GUI_72: -1701798196
@@ -2203,6 +2202,7 @@ TextureImporter:
       GUI_92: 1333591080
       Locked: 201310470
       PanelBG: -1024580011
+      QuitGame: 932805899
       board: -245445208
       grid: 283497543
   mipmapLimitGroupName: 
