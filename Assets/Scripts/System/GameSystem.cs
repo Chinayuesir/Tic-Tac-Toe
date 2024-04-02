@@ -125,6 +125,7 @@ namespace Game
             if (JudgeIsDraw())
             {
                 TicTacToe.GameDrawEvent.Trigger();
+                mGameModel.IsGameOver = true;
             }
         }
 
