@@ -28,33 +28,23 @@ namespace Game
                     mOnClick(x, y);
                 });
             }
-            mGameSystem.InitGame(true);
+            mGameSystem.InitGame();
+            if(!this.GetModel<IGameModel>().IsPlayerFirstMove) mGameSystem.AIMove();
             Refresh();
             mOnClick = (x, y) =>
             {
                 Debug.Log($"位于{x},{y}处的棋子被点击了");
                 mGameSystem.PlayerMove(x,y);
+                mGameSystem.JudgeWinOrLose();
                 mGameSystem.AIMove();
+                mGameSystem.JudgeWinOrLose();
                 Refresh();
             };
         }
-
-        void Test()
-        {
-            mGameSystem.Board.Row(1, (x, y, chess) =>
-            {
-                Debug.Log("Test");
-                chess.C = 'T';
-                Refresh();
-            });
-        }
-
+        
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                Test();
-            }
+            
         }
 
         //棋盘刷新方法

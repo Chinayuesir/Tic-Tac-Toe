@@ -674,7 +674,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GUI_25
+      name: ButtonBg
       rect:
         serializedVersion: 2
         x: 113
@@ -683,7 +683,7 @@ TextureImporter:
         height: 13
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 2, y: 2, z: 2, w: 2}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -800,16 +800,16 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GUI_31
+      name: PanelBG
       rect:
         serializedVersion: 2
-        x: 138
-        y: 161
-        width: 54
-        height: 30
+        x: 145
+        y: 177
+        width: 46
+        height: 14
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 5, y: 3, z: 5, w: 2}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -1808,16 +1808,16 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GUI_79
+      name: Locked
       rect:
         serializedVersion: 2
         x: 65
-        y: 64
-        width: 62
-        height: 15
+        y: 65
+        width: 30
+        height: 14
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 2, y: 2, z: 2, w: 2}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -2113,6 +2113,7 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       Bg: -882886849
+      ButtonBg: 1953808839
       GUI_0: -1306515365
       GUI_1: 827474721
       GUI_10: 430612959
@@ -2129,13 +2130,11 @@ TextureImporter:
       GUI_20: 1120278896
       GUI_21: -1899530731
       GUI_22: 896233222
-      GUI_25: 1953808839
       GUI_26: -190711645
       GUI_27: 1534526189
       GUI_28: 503486108
       GUI_29: -1313662989
       GUI_30: 1004482964
-      GUI_31: -1024580011
       GUI_32: 682073805
       GUI_33: 806106529
       GUI_34: -1453201509
@@ -2187,7 +2186,6 @@ TextureImporter:
       GUI_76: -2139305251
       GUI_77: 1215294216
       GUI_78: 446876321
-      GUI_79: 201310470
       GUI_8: -984743069
       GUI_80: 1062521593
       GUI_81: -161524743
@@ -2203,6 +2201,8 @@ TextureImporter:
       GUI_90: 895181706
       GUI_91: 340051860
       GUI_92: 1333591080
+      Locked: 201310470
+      PanelBG: -1024580011
       board: -245445208
       grid: 283497543
   mipmapLimitGroupName: 

@@ -9,6 +9,8 @@ namespace Game
     //框架管理位置
     public class TicTacToe : Architecture<TicTacToe>
     {
+        public static string Difficulty = "Difficulty";
+        public static EasyEvent<bool> GameOverEvent=new EasyEvent<bool>();
         protected override void Init()
         {
             RegisterModel<IGameModel>(new GameModel());

@@ -9,8 +9,7 @@ namespace Game
         /// <summary>
         /// 初始化游戏
         /// </summary>
-        /// <param name="isPlayerFirstMove"></param>
-        void InitGame(bool isPlayerFirstMove);
+        void InitGame();
         /// <summary>
         /// 棋盘
         /// </summary>
@@ -45,16 +44,13 @@ namespace Game
             mGameModel = this.GetModel<IGameModel>();
         }
         
-        public void InitGame(bool isPlayerFirstMove)
+        public void InitGame()
         {
-            mGameModel.IsPlayerFirstMove = isPlayerFirstMove;
+            //TODO:根据难度注入AI
             mGameModel.Turn = 1;
-            mGameModel.IsPlayerTurn = isPlayerFirstMove;
+            mGameModel.IsPlayerTurn = mGameModel.IsPlayerFirstMove;
             Board = new EasyGrid<Chess>(3, 3);
-            Board.Fill((x, y) =>
-            {
-                return new Chess(x, y, ' ');
-            });
+            Board.Fill((x, y) => new Chess(x, y, ' '));
 
             if (mGameModel.IsPlayerFirstMove)
             {
@@ -70,7 +66,67 @@ namespace Game
         
         public void JudgeWinOrLose()
         {
+            bool playerWin=JudgeWin(mPlayerChess);
+            bool aiWin=JudgeWin(mAIChess);
+            if (playerWin)
+            {
+                int curDif = mGameModel.CurDifficulty;
+                int historyDif = PlayerPrefs.GetInt(TicTacToe.Difficulty);
+                if(curDif==historyDif) 
+                    PlayerPrefs.SetInt(TicTacToe.Difficulty,curDif+1);
+                TicTacToe.GameOverEvent.Trigger(true);
+                mGameModel.IsGameOver = true;
+            }
+
+            if (aiWin)
+            {
+                TicTacToe.GameOverEvent.Trigger(false);
+                mGameModel.IsGameOver = true;
+            }
+        }
+
+        /// <summary>
+        /// 判断c字符代表的玩家是否赢了
+        /// </summary>
+        /// <param name="c"></param>
+        /// <returns></returns>
+        private bool JudgeWin(char c)
+        {
+            int count = 0;
+            for (int i = 0; i < 3; i++)
+            {
+                count = 0;
+                Board.Column(i, (_, _, chess) =>
+                {
+                    if (chess.C == c) count++;
+                });
+                if (count == 3) return true;
+            }
             
+            for (int i = 0; i < 3; i++)
+            {
+                count = 0;
+                Board.Row(i, (_, _, chess) =>
+                {
+                    if (chess.C == c) count++;
+                });
+                if (count == 3) return true;
+            }
+
+            count = 0;
+            Board.Diagonal(true, (_, _, chess) =>
+            {
+                if (chess.C == c) count++;
+            });
+            if (count == 3) return true;
+            
+            count = 0;
+            Board.Diagonal(false, (_, _, chess) =>
+            {
+                if (chess.C == c) count++;
+            });
+            if (count == 3) return true;
+            return false;
         }
 
         public void PlayerMove(int x,int y)
