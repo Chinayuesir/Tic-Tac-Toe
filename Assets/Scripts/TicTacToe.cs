@@ -11,7 +11,9 @@ namespace Game
     {
         protected override void Init()
         {
-        
+            RegisterModel<IGameModel>(new GameModel());
+            
+            RegisterSystem<IGameSystem>(new GameSystem());
         }
     }
 }

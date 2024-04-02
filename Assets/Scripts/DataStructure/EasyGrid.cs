@@ -3,6 +3,19 @@ using UnityEngine;
 
 namespace Game
 {
+    public class Chess
+    {
+        public int X;
+        public int Y;
+        public char C;
+
+        public Chess(int x,int y,char c)
+        {
+            X = x;
+            Y = y;
+            C = c;
+        }
+    }
     /// <summary>
     /// 主数据结构，使用数组管理以网格形式组织起来的元素
     /// </summary>
@@ -54,45 +67,73 @@ namespace Game
         }
 
         /// <summary>
-        /// 重置网格大小
+        /// 遍历某行
         /// </summary>
-        /// <param name="width"></param>
-        /// <param name="height"></param>
-        /// <param name="onAdd"></param>
-        public void Resize(int width, int height, Func<int, int, T> onAdd)
+        /// <param name="each"></param>
+        public void Row(int x, Action<int, int, T> each)
         {
-            var newGrid = new T[width, height];
-            for (var x = 0; x < mWidth; x++)
+            if (x>= mWidth)
             {
-                for (var y = 0; y < mHeight; y++)
+                Debug.LogError("不存在该行");
+                return;
+            }
+            else
+            {
+                for (int y = 0; y < mHeight; y++)
                 {
-                    newGrid[x, y] = mGrid[x, y];
-                }
-
-                // x addition
-                for (var y = mHeight; y < height; y++)
-                {
-                    newGrid[x, y] = onAdd(x, y);
+                    each(x, y, mGrid[x,y]);
                 }
             }
-
-            for (var x = mWidth;  x < width; x++)
-            {
-                // y addition
-                for (var y = 0; y < height; y++)
-                {
-                    newGrid[x, y] = onAdd(x, y);
-                }
-            }
-
-            // 清空之前的
-            Fill(default(T));
-
-            mWidth = width;
-            mHeight = height;
-            mGrid = newGrid;
         }
+        
+        /// <summary>
+        /// 遍历某列
+        /// </summary>
+        /// <param name="each"></param>
+        public void Column(int y, Action<int, int, T> each)
+        {
+            if (y>= mHeight)
+            {
+                Debug.LogError("不存在该行");
+                return;
+            }
+            else
+            {
+                for (int x = 0; x < mWidth; x++)
+                {
+                    each(x, y, mGrid[x,y]);
+                }
+            }
+        }
+        
+        /// <summary>
+        /// 遍历左右对角线
+        /// </summary>
+        /// <param name="each"></param>
+        public void Diagonal(bool isLeft,Action<int, int,T> each)
+        {
+            if (mHeight != mWidth)
+            {
+                Debug.LogError("该网格无对角线！");
+                return;
+            }
 
+            if (isLeft)
+            {
+                for (int x = 0; x < mWidth; x++)
+                {
+                    each(x, x, mGrid[x, x]);
+                }
+            }
+            else
+            {
+                for (int x = mWidth - 1, y = 0; x >= 0; x--, y++)
+                {
+                    each(x, y, mGrid[x, y]);
+                }
+            }
+        }
+        
         /// <summary>
         /// 遍历
         /// </summary>
